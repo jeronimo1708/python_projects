@@ -49,8 +49,9 @@ class Calculator:
         self.calculate()
         print(f"The result is {self.result}")
 
+#run the function
 if __name__ == "__main__":
     calculator = Calculator()
-    calculator.main()
+    calculator.main() 
 
 
