@@ -1,8 +1,6 @@
 import sys
 from art import logo
 
-print(logo)
-
 
 class Calculator:
 
@@ -39,15 +37,36 @@ class Calculator:
         self.operation1 = self.check_if_input_is_a_number(self.operation1)
         while self.operation not in self.operations.keys():
             self.operation = input("Enter the operation you want to perform -> (+, -, *, /): ")
-        self.operation2 = self.check_if_input_is_a_number(self.operation2)          
+        self.operation2 = self.check_if_input_is_a_number(self.operation2)
 
-    def calculate(self):
-        self.get_inputs(self.operation,self.operation1,self.operation2)
+    def continue_operation(self):
+        self.operation1 = self.result
+        self.operation = ""
+        while self.operation not in self.operations.keys():
+            self.operation = input("Enter the operation you want to perform -> (+, -, *, /): ")
+        self.operation2 = self.check_if_input_is_a_number(self.operation2)
+
+    def calculate(self):              
         self.result = self.operations[self.operation](self.operation1, self.operation2)
+        print(f"The result is {self.result}")        
+        self.continue_using()
+
+    def continue_using(self):
+        keep_going = True
+        while keep_going:
+            keep_using = ""
+            while keep_using not in ["y","n"]:
+                keep_using = input("Do you want to continue calculating with this result? y/n").lower()
+            if keep_using == "y":
+                self.continue_operation()
+                self.calculate()
+            else:
+                sys.exit()                           
 
     def main(self):
-        self.calculate()
-        print(f"The result is {self.result}")
+        print(logo)  
+        self.get_inputs(self.operation,self.operation1,self.operation2)
+        self.calculate()        
 
 #run the function
 if __name__ == "__main__":
