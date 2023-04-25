@@ -24,14 +24,14 @@ class Calculator:
         return num1/num2
 
     def check_if_input_is_a_number(self,num):
-        is_int = False
-        while not is_int:
+        is_float = False
+        while not is_float:
             try:
-                num = int(input("Enter a number: "))
-                is_int = True
+                num = float(input("Enter a number: "))
+                is_float = True
             except ValueError:
-                print("You have not entered a valid Integer. Please try again!")
-        return num
+                print("You have not entered a valid number. Please try again!")
+        return round(num, 4)
 
     def get_inputs(self,operation,operation1,operation2):    
         self.operation1 = self.check_if_input_is_a_number(self.operation1)
