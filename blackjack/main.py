@@ -25,9 +25,7 @@ def get_number_of_players(num_of_players, player_list):
 def create_players():
     name = ""
     name = input("Enter Player Name: \n")
-    chips = (
-        int(input("How many chips do you want to buy in with? (Default is 100)"))
-    )
+    chips = int(input("How many chips do you want to buy in with? (Default is 100)"))
     player = Player(name, Chips(chips))
     player_list.append(player)
 
@@ -41,24 +39,25 @@ def show_one_card(hand):
     for card in hand:
         print(card)
         break
-  
+
 
 # To be used when natural check is implemented
 def natural_check(hand):
     total = 0
-    for card in hand: 
+    for card in hand:
         total += card.value
     if total == 21:
         return True
     else:
-        return False 
+        return False
 
 
 def hit(person):
     person.hand.extend(deck.deal(1))
     person.calculate_hand_value()
-    print(f"{person} Hand -> {person.hand}")
-    print(f"{person} Hand Value -> {person.hand_value}")
+    print(f"{person.name} Hand -> {person.hand}")
+    print(f"{person.name} Hand Value -> {person.hand_value}")
+
 
 def stand():
     pass
@@ -75,12 +74,14 @@ def win_lose_check(dealer, player):
 
 def over_twenty_one_check(player):
     if player.hand_value > 21:
-        print(f"Player {player.name} has {player.hand} and its value is {player.hand_value} which is over 21!")
+        print(
+            f"Player {player.name} has {player.hand} and its value is {player.hand_value} which is over 21!"
+        )
         print(f"Player {player.name} lost! Wait for next round")
         return True
     else:
         return False
-        
+
 
 game_on = True
 while game_on:
@@ -114,9 +115,9 @@ while game_on:
 
         # take turns
 
-        for player in table.players: 
+        for player in table.players:
             print(f"{player.name}'s turn")
-            player.calculate_hand_value() 
+            player.calculate_hand_value()
             print(f"Hand Value {player.hand_value}")
             hit_or_stand = ""
             while hit_or_stand not in ("h", "s"):
@@ -125,7 +126,7 @@ while game_on:
                 keep_hitting = True
                 while keep_hitting:
                     hit(player)
-                    if over_twenty_one_check(player):                
+                    if over_twenty_one_check(player):
                         standby_player = table.players.remove(player)
                         table.lost_players.append(standby_player)
                         break
@@ -136,12 +137,10 @@ while game_on:
                         if hit_again == "n":
                             keep_hitting = False
 
-                
-                                   
             else:
                 stand()
 
-         # Dealers Play
+        # Dealers Play
         if table.players:
             print(f"Dealer has {dealer.hand}")
             print(f"Dealer hand Value is {dealer.hand_value}")
@@ -150,8 +149,6 @@ while game_on:
                 over_twenty_one_check(dealer)
             for remaining_players in table.players:
                 win_lose_check(dealer, remaining_players)
-
-            
 
         break
     break
