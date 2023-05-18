@@ -3,7 +3,6 @@ import sys
 from random import shuffle
 from game_data import data
 
-
 play_on = True
 shuffle(data)
 choice_mapping = {"a": 0, "b": 1}
