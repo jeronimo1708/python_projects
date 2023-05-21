@@ -2,6 +2,7 @@ import sys
 import random
 from turtle import Turtle, Screen
 
+# TO DO: Need to fix start positions of all turtles when the game is restarted.
 
 all_turtles = []
 colors = ["red", "blue", "green", "yellow", "purple", "pink"]
@@ -70,7 +71,6 @@ def play_again():
             title="Play Again?", prompt="Would you like to play again? (y/n)"
         )
     return play_again
-
 
 play_game = True
 while play_game:    
