@@ -72,8 +72,9 @@ def play_again():
         )
     return play_again
 
+
 play_game = True
-while play_game:    
+while play_game:
     game_on = False
     user_input = get_user_input()
     if user_input:
