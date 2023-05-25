@@ -40,3 +40,13 @@ class Snake:
     def move_left(self):
         if self.head.heading() != RIGHT:
             self.head.setheading(LEFT)
+
+    def add_snake_part(self, positions):
+        snake = Turtle(shape="square")
+        snake.penup()
+        snake.color("white")
+        snake.goto(positions)
+        self.snake_list.append(snake)
+
+    def extend(self):
+        self.add_snake_part(self.snake_list[-1].position())
