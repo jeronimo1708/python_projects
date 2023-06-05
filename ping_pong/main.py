@@ -53,7 +53,7 @@ screen.onkey(fun=player_2_paddle.move_up, key="Up")
 
 game_on = True
 while game_on:
-    sleep(0.1)
+    sleep(ball.move_speed)
     screen.update()
 
     # Collision with wall
@@ -69,7 +69,6 @@ while game_on:
         and ball.xcor() >= PADDLE_WIDTH_DISTANCE
     ):
         ball.bounce_x()
-        ball.increase_count()
 
     # Out of bounds check
 
@@ -79,9 +78,6 @@ while game_on:
     elif ball.xcor() <= -1 * OUT_OF_BOUNDS:
         ball.reset_position()
         player_2_score.increase_score()
-
-    if ball.count % 5 == 0:
-        ball.increase_speed()
 
 
 # To exit
