@@ -50,15 +50,15 @@ while game_on:
     # Detect collision with wall
 
     if snake.head.position()[0] > END_LOCATION_X or snake.head.position()[0] < -END_LOCATION_X or snake.head.position()[1] > END_LOCATION_Y or snake.head.position()[1] < -END_LOCATION_Y:
-        score.game_over()
-        game_on = False
+        score.reset()
+        snake.reset()
 
     # Detect collision with tail
     # If head touches body then trigger game over sequence
     for snake_part in snake.snake_list[1::]:
         if snake.head.distance(snake_part) < 10:
-            score.game_over()
-            game_on = False
+            score.reset()
+            snake.reset()
 
 
 
