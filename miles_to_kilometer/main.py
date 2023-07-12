@@ -28,7 +28,7 @@ km_label.grid(column=2, row=1)
 # Result calculation function
 def convert_to_km():
     ''' This function converts miles inputed by the user to kilometers'''
-    miles = int(miles_entry.get())
+    miles = float(miles_entry.get())
     km = round(miles * 1.60934, 3)
     km_result_label.config(text=f"{str(km)}")
 
