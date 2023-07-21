@@ -1,12 +1,53 @@
 import os 
 import sys
+import random
 from tkinter import *
 from tkinter import messagebox
 
 DATA_FILE = "/home/jeronimo/dev/python_projects/password_manager/data.txt"
+LOWERCASE_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+UPPERCASE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+SYMBOLS = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
-      
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #     
+
+def generate_password():
+    '''This function generates a password with 
+    -> 8 lowercase letters
+    -> 2 uppercase letters
+    -> 3 numbers
+    -> 2 special characters'''    
+    password = []
+    #### TO DO: Change the for loops to list comprehension
+    for i in range(8):
+        character = LOWERCASE_LETTERS[random.randint(0, 25)]
+        password.append(character)
+    for i in range(2):
+        character = UPPERCASE_LETTERS[random.randint(0, 25)]
+        password.append(character)
+    for i in range(3):
+        character = NUMBERS[random.randint(0, 9)]
+        password.append(character)
+    for i in range(2):
+        character = SYMBOLS[random.randint(0, 8)]
+        password.append(character)
+    random.shuffle(password)
+    strong_password = "".join(password)
+    return strong_password
+
+def generate_password_in_entry_box():
+    '''This function displays the generated password in the password entry box'''
+    strong_password = generate_password()
+    password_entry_box.delete(0, END)
+    password_entry_box.insert(0, strong_password)
+    copy_password_to_clipboard(strong_password)
+
+
+def copy_password_to_clipboard(strong_password):
+    '''This function copies the password that was generated to the clipboard'''
+    window.clipboard_clear()
+    window.clipboard_append(strong_password)
 
 
 
@@ -47,7 +88,8 @@ def save_password():
     website, email, password = get_entry_data()
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="Oops", message="Please dont leave any fields empty")
-    else:        
+    else:  
+        # TO DO: Add functionality to give the user a chance to check the inputs      
         if os.path.isfile(DATA_FILE):
             write_to_file("a", website, email, password)
         else:
@@ -96,7 +138,7 @@ password_entry_box = Entry(width=25)
 password_entry_box.grid(row=4, column=2)
 
 # Generate Password button
-generate_password_button = Button(text="Generate", width=12)
+generate_password_button = Button(text="Generate", width=12, command=generate_password_in_entry_box)
 generate_password_button.grid(row=4, column=3)
 
 # Add button
