@@ -4,6 +4,7 @@ import random
 from tkinter import *
 from tkinter import messagebox
 
+# TO DO: Save passwords in database instead of using text files
 DATA_FILE = "/home/jeronimo/dev/python_projects/password_manager/data.txt"
 LOWERCASE_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 UPPERCASE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -83,18 +84,26 @@ def clear_text():
     website_entry_box.delete(0, END)
     password_entry_box.delete(0, END)
 
+def validate_input(website, email, password):
+    '''This function will display the website, email and password in a popup box and ask the user to check if the details are correct'''
+    proceed = messagebox.askokcancel(title="Validate Input", message=f"Please check the input\nWebsite:{website}\nEmail:{email}\nPassword:{password}")
+    return proceed
+
 def save_password():
     '''This function saves the password to data.csv file'''
     website, email, password = get_entry_data()
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="Oops", message="Please dont leave any fields empty")
     else:  
-        # TO DO: Add functionality to give the user a chance to check the inputs      
-        if os.path.isfile(DATA_FILE):
-            write_to_file("a", website, email, password)
-        else:
-            write_to_file("w", website, email, password)
-        clear_text()
+        # TO DO: Add functionality to give the user a chance to check the inputs
+        proceed = validate_input(website, email, password)
+        if proceed: 
+            if os.path.isfile(DATA_FILE):
+                write_to_file("a", website, email, password)
+            else:
+                write_to_file("w", website, email, password)
+            clear_text()
+            messagebox.showinfo(title="Done", message="Password was saved successfully!")
     
     
 
