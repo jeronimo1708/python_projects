@@ -74,14 +74,18 @@ def get_entry_data():
     return website, email, password  
 
 def create_data_for_json(website, email, password):
-    data = {website: {"email": email, "password": password}}
+    data = {website.lower(): {"email": email, "password": password}}
     return data
 
 def read_from_file():
-    '''This function reads from the data file'''
+    '''This function reads from the data file. If the data file does not exist, then it will create a new one'''
+    # try:
     with open(DATA_FILE, "r") as file:
         data = json.load(file)
     return data
+    # except FileNotFoundError:
+    #     file = open(DATA_FILE, "w")
+    #     file.close()
 
 def write_to_file(website, email, password):
     '''This function writes the data the user has entered to data.csv file in a pipe delimited format'''
@@ -90,8 +94,7 @@ def write_to_file(website, email, password):
         json.dump(data, file)
 
 def update_file(data, website, email, password):
-    '''This function updates the DATA FILE with new entries
-    It first read the data from json and then updates it'''
+    '''This function updates the DATA FILE with new entries'''
     with open(DATA_FILE, "w") as file:    
         new_data = create_data_for_json(website, email, password)
         data.update(new_data)
@@ -125,7 +128,27 @@ def save_password():
             clear_text()
             messagebox.showinfo(title="Done", message="Password was saved successfully!")
     
-    
+# ---------------------------- SEARCH FOR PASSWORD ------------------------------- #
+
+def search():
+    '''This fucntion searches for a password in the database. If the password is found, then it copies it to the clipboard and clears the website text'''
+    website = get_website()
+    if len(website) == 0:
+        messagebox.showinfo(title="Oops", message="Website field is empty")
+    else:
+        try:   
+            data = read_from_file()
+            try:
+                website, email, password = website.capitalize(), data[website.lower()]["email"], data[website.lower()]["password"]
+                messagebox.showinfo(title=website, message=f"Email:{email}\nPassword:{password}")
+            except KeyError:
+                messagebox.showinfo(title="No Website found", message=f"{website}: No password found")
+            else:
+                copy_password_to_clipboard(password)
+                clear_text()
+        except FileNotFoundError:
+            messagebox.showinfo(title="No Website found", message=f"{website}: No password found")
+        
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -145,9 +168,9 @@ website_label = Label(text="Website:")
 website_label.grid(row=2, column=1)
 
 # Website entry box
-website_entry_box = Entry(width=40)
+website_entry_box = Entry(width=25)
 website_entry_box.focus()
-website_entry_box.grid(row=2, column=2, columnspan=2)
+website_entry_box.grid(row=2, column=2)
 
 # Email/Username label
 email_label = Label(text="Email/Username:")
@@ -175,5 +198,8 @@ add_button = Button(text="Add", width=37, command=save_password)
 add_button.grid(row=5, column=2, columnspan=2)
 
 # Search button
+search_button = Button(text="Search", width=12, command=search)
+search_button.grid(row=2, column=3)
+
 
 window.mainloop() 
