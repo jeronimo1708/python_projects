@@ -1,11 +1,11 @@
 import os 
-import sys
+import json
 import random
 from tkinter import *
 from tkinter import messagebox
 
 # TO DO: Save passwords in database instead of using text files
-DATA_FILE = "/home/jeronimo/dev/python_projects/password_manager/data.txt"
+DATA_FILE = "/home/jeronimo/dev/python_projects/password_manager/data.json"
 LOWERCASE_LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 UPPERCASE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -71,13 +71,31 @@ def get_entry_data():
     website = get_website()
     email = get_email()
     password = get_password()
-    return website, email, password    
+    return website, email, password  
 
-def write_to_file(mode, website, email, password):
+def create_data_for_json(website, email, password):
+    data = {website: {"email": email, "password": password}}
+    return data
+
+def read_from_file():
+    '''This function reads from the data file'''
+    with open(DATA_FILE, "r") as file:
+        data = json.load(file)
+    return data
+
+def write_to_file(website, email, password):
     '''This function writes the data the user has entered to data.csv file in a pipe delimited format'''
-    with open(DATA_FILE, mode) as file:
-        line = f"{website}|{email}|{password}\n"
-        file.write(line)
+    with open(DATA_FILE, "w") as file:
+        data = create_data_for_json(website, email, password)
+        json.dump(data, file)
+
+def update_file(data, website, email, password):
+    '''This function updates the DATA FILE with new entries
+    It first read the data from json and then updates it'''
+    with open(DATA_FILE, "w") as file:    
+        new_data = create_data_for_json(website, email, password)
+        data.update(new_data)
+        json.dump(data, file)
 
 def clear_text():
     '''This function clears the text from the website and password fields after the user has successfully saved the password to data.csv file''' 
@@ -90,18 +108,20 @@ def validate_input(website, email, password):
     return proceed
 
 def save_password():
-    '''This function saves the password to data.csv file'''
+    '''This function saves the password to data.json file'''
     website, email, password = get_entry_data()
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="Oops", message="Please dont leave any fields empty")
     else:  
-        # TO DO: Add functionality to give the user a chance to check the inputs
+        # TO DO: Add functionality to give the user a chance to check the inputs (DONE)
         proceed = validate_input(website, email, password)
         if proceed: 
-            if os.path.isfile(DATA_FILE):
-                write_to_file("a", website, email, password)
-            else:
-                write_to_file("w", website, email, password)
+            try:
+                data = read_from_file()
+            except FileNotFoundError:
+                write_to_file(website, email, password)
+            else:                
+                update_file(data, website, email, password)
             clear_text()
             messagebox.showinfo(title="Done", message="Password was saved successfully!")
     
@@ -154,4 +174,6 @@ generate_password_button.grid(row=4, column=3)
 add_button = Button(text="Add", width=37, command=save_password)
 add_button.grid(row=5, column=2, columnspan=2)
 
-window.mainloop()
+# Search button
+
+window.mainloop() 
