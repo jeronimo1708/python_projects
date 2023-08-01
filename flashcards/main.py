@@ -15,6 +15,9 @@ current_english_word = None
 
 language_to_english_flag = False
 
+# TODO: Add multiple language support
+# TODO: Add database support instead of JSON
+
 
 # -------------------- Read data on startup --------------------#
 
