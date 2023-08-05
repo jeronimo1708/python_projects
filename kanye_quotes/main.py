@@ -9,7 +9,7 @@ def get_quote():
     response.raise_for_status()
     data = response.json()
     quote = data["quote"]
-    canvas.itemconfigure(quote_text, text=quote)
+    canvas.itemconfig(quote_text, text=quote)
 
 
 
